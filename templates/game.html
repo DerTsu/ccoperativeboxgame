@@ -100,6 +100,40 @@
             socket.emit("move", { x: u.x, y: u.y });
         }
 
+        document.addEventListener("keydown", function(event) {
+            const key = event.key;
+
+            // Estas son las teclas con las que se puede mover
+            const keysToHandle = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", "W", "A", "S", "D"];
+
+            if (keysToHandle.includes(key)) {
+                event.preventDefault(); // Evita que el navegador haga scroll
+            }
+
+            switch (key) {
+                case "ArrowUp":
+                case "w":
+                case "W":
+                    move("up");
+                    break;
+                case "ArrowDown":
+                case "s":
+                case "S":
+                    move("down");
+                    break;
+                case "ArrowLeft":
+                case "a":
+                case "A":
+                    move("left");
+                    break;
+                case "ArrowRight":
+                case "d":
+                case "D":
+                    move("right");
+                    break;
+            }
+        });
+
         function reiniciar() {
             fetch("/reset");
             document.getElementById("msg").textContent = "";
