@@ -103,4 +103,4 @@ def countdown():
 
 if __name__ == '__main__':
     socketio.start_background_task(countdown)
-    socketio.run(app, host="0.0.0.0", port=5004)
+    socketio.run(app, debug=True, host="0.0.0.0", port=5004)
