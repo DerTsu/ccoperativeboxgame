@@ -9,6 +9,25 @@
         button { margin: 3px; width: 60px; height: 60px; font-size: 20px; }
         #chat { margin-top: 20px; }
         #users { font-size: 18px; }
+        .swal2-confirm {
+            all: unset;
+            background-color: #6c63ff; /* morado sólido */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .swal2-cancel {
+            all: unset;
+            background-color: #6c757d; /* gris sólido */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
     </style>
 </head>
 <body>
@@ -33,8 +52,6 @@
 
     <div id="chat">
         <h3>Chat</h3>
-        <input type="text" id="chat_input" placeholder="Escribe un mensaje...">
-        <button onclick="sendMessage()">Enviar</button>
         <div id="messages"></div>
     </div>
 
@@ -44,6 +61,7 @@
     </div>
 
     <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const username = new URLSearchParams(window.location.search).get('username') || "Anon";
         const socket = io();
@@ -105,14 +123,6 @@
             document.getElementById("msg").textContent = "";
         }
 
-        function sendMessage() {
-            const msg = document.getElementById("chat_input").value;
-            if (msg) {
-                socket.emit("chat_message", { message: msg });
-                document.getElementById("chat_input").value = '';
-            }
-        }
-
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -155,6 +165,23 @@
                 userList.appendChild(li);
             }
         }
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 't' || event.key === 'T') {
+                Swal.fire({
+                title: 'Chat',
+                input: 'text',
+                inputPlaceholder: 'comenta aqui...',
+                showCancelButton: true,
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                if (result.isConfirmed && result.value) {
+                    socket.emit("chat_message", { message: result.value});
+                }
+                });
+            }
+        });
     </script>
 </body>
 </html>
